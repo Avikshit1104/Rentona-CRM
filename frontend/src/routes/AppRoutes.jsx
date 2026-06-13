@@ -5,8 +5,8 @@ import {
   Navigate,
 } from "react-router-dom";
 
-import Login from "../pages/auth/Login";
-import Signup from "../pages/auth/Signup";
+import Login from "../pages/auth/login";
+import Signup from "../pages/auth/signup";
 
 import OwnerDashboard from "../pages/owner/OwnerDashboard";
 import OwnerAnalytics from "../pages/owner/OwnerAnalytics";
