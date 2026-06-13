@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import API from "../../api/axios";
@@ -64,6 +64,7 @@ const Login = () => {
             type="email"
             name="email"
             placeholder="Email address"
+            value={formData.email}
             onChange={handleChange}
             className="border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
             required
@@ -73,16 +74,18 @@ const Login = () => {
             type="password"
             name="password"
             placeholder="Password"
+            value={formData.password}
             onChange={handleChange}
             className="border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
             required
           />
 
           <button
+            type="submit"
             disabled={loading}
             className={`mt-2 py-3 rounded-xl text-white font-semibold transition ${
               loading
-                ? "bg-gray-500"
+                ? "bg-gray-500 cursor-not-allowed"
                 : "bg-indigo-600 hover:bg-indigo-700"
             }`}
           >
@@ -90,7 +93,17 @@ const Login = () => {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-gray-500 mt-6">
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
+            className="text-indigo-600 font-semibold hover:underline"
+          >
+            Sign Up
+          </Link>
+        </p>
+
+        <p className="text-center text-sm text-gray-500 mt-3">
           Owner • Tenant • Worker
         </p>
       </div>
