@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "acceptedJobs" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "completedJobs" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "totalReviews" INTEGER NOT NULL DEFAULT 0;

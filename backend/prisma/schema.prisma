@@ -1,0 +1,213 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  TENANT
+  OWNER
+  WORKER
+  ADMIN
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ComplaintStatus {
+  OPEN
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum JobStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  DONE
+}
+
+enum WorkerSkill {
+  PLUMBER
+  ELECTRICIAN
+  CARPENTER
+  CLEANER
+  PAINTER
+  TECHNICIAN
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+model User {
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  password String
+  role     Role
+  phone    String?
+
+  properties    Property[]
+  applications  TenantApplication[]
+  complaints    Complaint[]
+  workerJobs    WorkerJob[]
+  notifications Notification[]
+  chatMessages  ChatMessage[]
+
+  payments Payment[] @relation("TenantPayments")
+
+  skill           WorkerSkill?
+  reviewsReceived Review[]     @relation("worker")
+  reviewsGiven    Review[]     @relation("reviewer")
+  latitude        Float?
+  longitude       Float?
+  rating          Float        @default(0)
+  totalReviews    Int          @default(0)
+  completedJobs   Int          @default(0)
+  acceptedJobs    Int          @default(0)
+
+  createdAt DateTime @default(now())
+}
+
+model Property {
+  id          String @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  location    String
+  latitude    Float?
+  longitude   Float?
+
+  image String?
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  applications TenantApplication[]
+  complaints   Complaint[]
+  payments     Payment[]
+
+  createdAt DateTime @default(now())
+}
+
+model TenantApplication {
+  id String @id @default(uuid())
+
+  tenantId String
+  tenant   User   @relation(fields: [tenantId], references: [id])
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
+
+  status ApplicationStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+}
+
+model Complaint {
+  id String @id @default(uuid())
+
+  title       String
+  description String
+  image       String?
+
+  status ComplaintStatus @default(OPEN)
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
+
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id])
+
+  jobs WorkerJob[]
+
+  createdAt DateTime @default(now())
+}
+
+model WorkerJob {
+  id String @id @default(uuid())
+
+  complaintId String
+  complaint   Complaint @relation(fields: [complaintId], references: [id])
+
+  workerId String
+  worker   User   @relation(fields: [workerId], references: [id])
+
+  status JobStatus @default(PENDING)
+  review Review?
+
+  messages ChatMessage[]
+
+  createdAt DateTime @default(now())
+}
+
+model Review {
+  id String @id @default(uuid())
+
+  rating  Int
+  comment String?
+
+  workerId String
+  worker   User   @relation("worker", fields: [workerId], references: [id])
+
+  reviewerId String
+  reviewer   User   @relation("reviewer", fields: [reviewerId], references: [id])
+
+  jobId String    @unique
+  job   WorkerJob @relation(fields: [jobId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  amount        Float
+  status        PaymentStatus @default(PENDING)
+  month         String
+  transactionId String?
+  method        String?
+
+  tenantId   String
+  propertyId String
+
+  tenant   User     @relation("TenantPayments", fields: [tenantId], references: [id])
+  property Property @relation(fields: [propertyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Notification {
+  id      String  @id @default(uuid())
+  title   String
+  message String
+  type    String?
+  isRead  Boolean @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model ChatMessage {
+  id       String @id @default(uuid())
+  jobId    String
+  senderId String
+  message  String
+
+  job    WorkerJob @relation(fields: [jobId], references: [id])
+  sender User      @relation(fields: [senderId], references: [id])
+
+  createdAt DateTime @default(now())
+}
