@@ -1,0 +1,101 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
+import API from "../../api/axios";
+import { useAuth } from "../../context/AuthContext";
+
+const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await API.post("/auth/login", formData);
+
+      const { token, user } = res.data;
+
+      login(token, user);
+      toast.success("Login successful");
+
+      navigate(`/${user.role.toLowerCase()}`);
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error.response?.data?.message || "Login failed"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-slate-900">
+            Rentora
+          </h1>
+
+          <p className="text-gray-500 mt-2">
+            Login to your dashboard
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            type="email"
+            name="email"
+            placeholder="Email address"
+            onChange={handleChange}
+            className="border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            className="border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+
+          <button
+            disabled={loading}
+            className={`mt-2 py-3 rounded-xl text-white font-semibold transition ${
+              loading
+                ? "bg-gray-500"
+                : "bg-indigo-600 hover:bg-indigo-700"
+            }`}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-gray-500 mt-6">
+          Owner • Tenant • Worker
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
