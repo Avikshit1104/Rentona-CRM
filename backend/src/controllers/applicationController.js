@@ -67,8 +67,6 @@ const applyForProperty = async (req, res) => {
       },
     });
 
-    console.log("Owner notification userId:", notification.userId);
-
     emitNotification(notification.userId, notification);
 
     res.status(201).json({
@@ -122,6 +120,86 @@ const getOwnerApplications = async (req, res) => {
       success: true,
       count: applications.length,
       applications,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+const getMyApprovedApplications = async (req, res) => {
+  try {
+    if (req.user.role !== "TENANT") {
+      return res.status(403).json({
+        success: false,
+        message: "Only tenants allowed",
+      });
+    }
+
+    const applications = await prisma.tenantApplication.findMany({
+      where: {
+        tenantId: req.user.id,
+        status: "APPROVED",
+      },
+      include: {
+        property: {
+          include: {
+            owner: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                phone: true,
+              },
+            },
+            complaints: {
+              include: {
+                createdBy: {
+                  select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    role: true,
+                  },
+                },
+                jobs: {
+                  include: {
+                    worker: {
+                      select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        skill: true,
+                        rating: true,
+                      },
+                    },
+                  },
+                  orderBy: {
+                    createdAt: "desc",
+                  },
+                },
+              },
+              orderBy: {
+                createdAt: "desc",
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      count: applications.length,
+      applications,
+      properties: applications.map((application) => application.property),
     });
   } catch (error) {
     console.log(error);
@@ -259,7 +337,6 @@ const updateApplicationStatus = async (req, res) => {
     });
 
     if (result.notification) {
-      console.log("Tenant notification userId:", result.notification.userId);
       emitNotification(result.notification.userId, result.notification);
     }
 
@@ -286,5 +363,6 @@ const updateApplicationStatus = async (req, res) => {
 module.exports = {
   applyForProperty,
   getOwnerApplications,
+  getMyApprovedApplications,
   updateApplicationStatus,
 };
