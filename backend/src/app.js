@@ -24,7 +24,7 @@ app.use(
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Rentora API running");
+  res.send("rentona API running");
 });
 
 app.use("/api/auth", authRoutes);

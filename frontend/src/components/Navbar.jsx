@@ -9,7 +9,7 @@ const Navbar = () => {
     <div className="bg-black text-white px-4 md:px-8 py-4">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">
-          Rentora
+          rentona
         </h1>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5 w-full sm:w-auto">

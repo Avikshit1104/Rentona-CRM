@@ -28,7 +28,7 @@ const Sidebar = () => {
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            Rentora
+            rentona
           </h1>
 
           <p className="text-slate-400 text-sm mt-1">
@@ -134,7 +134,7 @@ const Sidebar = () => {
     <>
       <div className="md:hidden fixed top-0 left-0 right-0 bg-slate-950 text-white px-4 py-3 flex justify-between items-center z-50">
         <h1 className="text-xl font-bold">
-          Rentora
+          rentona
         </h1>
 
         <button

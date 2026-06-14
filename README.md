@@ -1,6 +1,6 @@
-# 🏠 Rentora CRM
+# 🏠 rentona CRM
 
-Rentora is a full-stack Property Management CRM that connects Property Owners, Tenants, and Workers on a single platform. It streamlines property listing, tenant applications, complaint management, worker assignment, rent tracking, real-time communication, notifications, and analytics.
+rentona is a full-stack Property Management CRM that connects Property Owners, Tenants, and Workers on a single platform. It streamlines property listing, tenant applications, complaint management, worker assignment, rent tracking, real-time communication, notifications, and analytics.
 
 ---
 
@@ -131,7 +131,7 @@ Rentora is a full-stack Property Management CRM that connects Property Owners, T
 ## 📂 Project Structure
 
 ```bash
-Rentora-CRM/
+rentona-CRM/
 │
 ├── backend/
 │   ├── prisma/

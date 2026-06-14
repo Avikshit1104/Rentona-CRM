@@ -65,7 +65,7 @@ const Signup = () => {
         </h1>
 
         <p className="text-gray-500 text-center mb-8 text-sm md:text-base">
-          Join Rentora as an owner, tenant, or worker.
+          Join rentona as an owner, tenant, or worker.
         </p>
 
         <form
