@@ -15,13 +15,9 @@ const initSocket = (server) => {
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
 
-  socket.on("register-user", (userId) => {
-    onlineUsers.set(userId, socket.id);
-    socket.join(`user_${userId}`);
-
-    console.log("Registered user:", userId);
-    console.log("Current online users:", Array.from(onlineUsers.entries()));
-  });
+    socket.on("register-user", (userId) => {
+      onlineUsers.set(userId, socket.id);
+    });
 
     socket.on("join-room", (jobId) => {
       socket.join(`job_${jobId}`);
