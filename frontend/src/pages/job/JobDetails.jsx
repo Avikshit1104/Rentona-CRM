@@ -137,7 +137,7 @@ const JobDetails = () => {
 
             {job.complaint?.image && (
               <img
-                src={`${import.meta.env.VITE_API_URL}${job.complaint.image}`}
+                src={job.complaint.image}
                 alt={job.complaint?.title}
                 className="w-full h-52 md:h-72 object-cover rounded-xl mt-5"
               />
@@ -181,7 +181,7 @@ const JobDetails = () => {
           <InfoCard title="Property">
             {job.complaint?.property?.image && (
               <img
-                src={`${import.meta.env.VITE_API_URL}${job.complaint.property.image}`}
+                src={job.complaint.property.image}
                 alt={job.complaint.property.title}
                 className="w-full h-44 object-cover rounded-xl mb-4"
               />

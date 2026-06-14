@@ -151,7 +151,7 @@ const TenantDashboard = () => {
               >
                 {property.image && (
                   <img
-                    src={`${import.meta.env.VITE_API_URL}${property.image}`}
+                    src={property.image}
                     alt={property.title}
                     className="w-full h-44 object-cover rounded-xl mb-4"
                   />
@@ -256,7 +256,7 @@ const TenantDashboard = () => {
 
                 {complaint.image && (
                   <img
-                    src={`${import.meta.env.VITE_API_URL}${complaint.image}`}
+                    src={complaint.image}
                     alt={complaint.title}
                     className="w-full h-48 object-cover rounded-xl mt-4"
                   />

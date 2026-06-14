@@ -11,42 +11,26 @@ const createProperty = async (req, res) => {
       longitude,
     } = req.body;
 
-    // IMAGE FROM MULTER
-    const image = req.file
-      ? `/uploads/${req.file.filename}`
-      : null;
+    const image = req.file ? req.file.path : null;
 
-    // ROLE CHECK
     if (req.user.role !== "OWNER") {
       return res.status(403).json({
-        message:
-          "Only owners can create properties",
+        message: "Only owners can create properties",
       });
     }
 
-    const property =
-      await prisma.property.create({
-        data: {
-          title,
-          description,
-
-          // FIXED FLOAT VALUES
-          price: parseFloat(price),
-
-          location,
-          image,
-
-          latitude: latitude
-            ? parseFloat(latitude)
-            : null,
-
-          longitude: longitude
-            ? parseFloat(longitude)
-            : null,
-
-          ownerId: req.user.id,
-        },
-      });
+    const property = await prisma.property.create({
+      data: {
+        title,
+        description,
+        price: parseFloat(price),
+        location,
+        image,
+        latitude: latitude ? parseFloat(latitude) : null,
+        longitude: longitude ? parseFloat(longitude) : null,
+        ownerId: req.user.id,
+      },
+    });
 
     res.status(201).json({
       message: "Property created",
@@ -61,20 +45,16 @@ const createProperty = async (req, res) => {
   }
 };
 
-const getProperties = async (
-  req,
-  res
-) => {
+const getProperties = async (req, res) => {
   try {
-    const properties =
-      await prisma.property.findMany({
-        include: {
-          owner: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
+    const properties = await prisma.property.findMany({
+      include: {
+        owner: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
     res.status(200).json({
       success: true,
@@ -89,28 +69,22 @@ const getProperties = async (
   }
 };
 
-const getMyProperties = async (
-  req,
-  res
-) => {
+const getMyProperties = async (req, res) => {
   try {
     if (req.user.role !== "OWNER") {
       return res.status(403).json({
-        message:
-          "Only owners allowed",
+        message: "Only owners allowed",
       });
     }
 
-    const properties =
-      await prisma.property.findMany({
-        where: {
-          ownerId: req.user.id,
-        },
-
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
+    const properties = await prisma.property.findMany({
+      where: {
+        ownerId: req.user.id,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
     res.status(200).json({
       success: true,

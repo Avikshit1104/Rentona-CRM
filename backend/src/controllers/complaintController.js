@@ -10,7 +10,7 @@ const createComplaint = async (req, res) => {
       });
     }
 
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
+    const image = req.file ? req.file.path : null;
 
     const complaint = await prisma.complaint.create({
       data: {

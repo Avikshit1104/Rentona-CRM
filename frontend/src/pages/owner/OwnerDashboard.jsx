@@ -316,7 +316,7 @@ const OwnerDashboard = () => {
 
                 {complaint.image && (
                   <img
-                    src={`${import.meta.env.VITE_API_URL}${complaint.image}`}
+                    src={complaint.image}
                     alt={complaint.title}
                     className="w-full h-44 md:h-48 object-cover rounded-xl mt-4"
                   />
@@ -371,7 +371,7 @@ const OwnerDashboard = () => {
               >
                 {p.image && (
                   <img
-                    src={`${import.meta.env.VITE_API_URL}${p.image}`}
+                    src={p.image}
                     alt={p.title}
                     className="w-full h-44 md:h-48 object-cover rounded-xl mb-4"
                   />

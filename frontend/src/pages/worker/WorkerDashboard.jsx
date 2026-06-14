@@ -198,7 +198,7 @@ const WorkerDashboard = () => {
 
                 {job.complaint?.image && (
                   <img
-                    src={`${import.meta.env.VITE_API_URL}${job.complaint.image}`}
+                    src={job.complaint.image}
                     alt={job.complaint?.title}
                     className="w-full h-44 md:h-48 object-cover rounded-xl mt-4"
                   />
