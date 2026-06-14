@@ -393,6 +393,39 @@ const getJobDetails = async (req, res) => {
       });
     }
 
+    if (req.user.role === "OWNER") {
+      if (job.complaint.property.ownerId !== req.user.id) {
+        return res.status(403).json({
+          message: "Unauthorized",
+        });
+      }
+    }
+
+    if (req.user.role === "WORKER") {
+      if (job.workerId !== req.user.id) {
+        return res.status(403).json({
+          message: "Unauthorized",
+        });
+      }
+    }
+
+    if (req.user.role === "TENANT") {
+      const approvedApplication =
+        await prisma.tenantApplication.findFirst({
+          where: {
+            tenantId: req.user.id,
+            propertyId: job.complaint.propertyId,
+            status: "APPROVED",
+          },
+        });
+
+      if (!approvedApplication) {
+        return res.status(403).json({
+          message: "Unauthorized",
+        });
+      }
+    }
+
     res.status(200).json({
       job,
     });
