@@ -49,7 +49,7 @@ const Login = () => {
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 md:p-8">
         <div className="mb-8 text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
-            rentona
+            Rentona
           </h1>
 
           <p className="text-gray-500 mt-2 text-sm md:text-base">
