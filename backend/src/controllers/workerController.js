@@ -1,5 +1,6 @@
 const getDistance = require("../utils/distance");
 const prisma = require("../prisma");
+const { emitNotification } = require("../socket");
 
 const getWorkers = async (req, res) => {
   try {
@@ -171,18 +172,41 @@ const recommendWorkers = async (
 
 const assignWorker = async (req, res) => {
   try {
-    const {
-      complaintId,
-      workerId,
-    } = req.body;
+    const { complaintId, workerId } = req.body;
 
-    const job =
-      await prisma.workerJob.create({
-        data: {
-          complaintId,
-          workerId,
+    const existingJob = await prisma.workerJob.findFirst({
+      where: {
+        complaintId,
+        workerId,
+        status: {
+          in: ["PENDING", "ACCEPTED"],
         },
+      },
+    });
+
+    if (existingJob) {
+      return res.status(400).json({
+        message: "Worker already assigned to this complaint",
       });
+    }
+
+    const job = await prisma.workerJob.create({
+      data: {
+        complaintId,
+        workerId,
+      },
+      include: {
+        complaint: true,
+        worker: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            skill: true,
+          },
+        },
+      },
+    });
 
     await prisma.complaint.update({
       where: {
@@ -192,6 +216,20 @@ const assignWorker = async (req, res) => {
         status: "ASSIGNED",
       },
     });
+
+    emitNotification(workerId, {
+      title: "New job assigned",
+      message: `You have been assigned a new job: ${job.complaint.title}`,
+      type: "JOB_ASSIGNED",
+      jobId: job.id,
+    });
+
+    const io = req.app.get("io");
+
+    if (io) {
+      io.emit("job-updated");
+      io.to(`user_${workerId}`).emit("job-updated");
+    }
 
     res.status(201).json({
       message: "Worker assigned",
