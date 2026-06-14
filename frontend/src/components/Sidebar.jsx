@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Link,
   useNavigate,
@@ -12,13 +13,17 @@ const Sidebar = () => {
 
   const { user, logout, unreadChats } = useAuth();
 
+  const [open, setOpen] = useState(false);
+
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
-  return (
-    <div className="w-64 min-h-screen bg-slate-950 text-white p-6 flex flex-col">
+  const closeMenu = () => setOpen(false);
+
+  const SidebarContent = () => (
+    <>
       <div className="mb-10">
         <h1 className="text-3xl font-bold tracking-tight">
           Rentora
@@ -36,18 +41,21 @@ const Sidebar = () => {
               to="/owner"
               label="Dashboard"
               currentPath={location.pathname}
+              onClick={closeMenu}
             />
 
             <NavItem
               to="/owner/analytics"
               label="Analytics"
               currentPath={location.pathname}
+              onClick={closeMenu}
             />
 
             <NavItem
               to="/owner/payments"
               label="Revenue"
               currentPath={location.pathname}
+              onClick={closeMenu}
             />
           </>
         )}
@@ -58,12 +66,14 @@ const Sidebar = () => {
               to="/tenant"
               label="Dashboard"
               currentPath={location.pathname}
+              onClick={closeMenu}
             />
 
             <NavItem
               to="/tenant/payments"
               label="Payments"
               currentPath={location.pathname}
+              onClick={closeMenu}
             />
           </>
         )}
@@ -73,6 +83,7 @@ const Sidebar = () => {
             to="/worker"
             label="Dashboard"
             currentPath={location.pathname}
+            onClick={closeMenu}
           />
         )}
 
@@ -80,6 +91,7 @@ const Sidebar = () => {
           to="/notifications"
           label="Notifications"
           currentPath={location.pathname}
+          onClick={closeMenu}
         />
 
         <div className="flex items-center justify-between px-4 py-3 rounded-xl text-slate-300 bg-slate-900">
@@ -105,7 +117,49 @@ const Sidebar = () => {
           Logout
         </button>
       </div>
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile Navbar */}
+      <div className="md:hidden fixed top-0 left-0 right-0 bg-slate-950 text-white px-4 py-3 flex justify-between items-center z-50">
+        <h1 className="text-xl font-bold">
+          Rentora
+        </h1>
+
+        <button
+          onClick={() => setOpen(true)}
+          className="text-2xl"
+        >
+          ☰
+        </button>
+      </div>
+
+      {/* Mobile Overlay */}
+      {open && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
+      {/* Mobile Drawer */}
+      <div
+        className={`md:hidden fixed top-0 left-0 h-full w-72 bg-slate-950 text-white p-6 flex flex-col z-50 transition-transform duration-300 ${
+          open
+            ? "translate-x-0"
+            : "-translate-x-full"
+        }`}
+      >
+        <SidebarContent />
+      </div>
+
+      {/* Desktop Sidebar */}
+      <div className="hidden md:flex w-64 min-h-screen bg-slate-950 text-white p-6 flex-col">
+        <SidebarContent />
+      </div>
+    </>
   );
 };
 
@@ -113,12 +167,14 @@ const NavItem = ({
   to,
   label,
   currentPath,
+  onClick,
 }) => {
   const active = currentPath === to;
 
   return (
     <Link
       to={to}
+      onClick={onClick}
       className={`px-4 py-3 rounded-xl transition ${
         active
           ? "bg-indigo-600 text-white"

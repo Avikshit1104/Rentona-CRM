@@ -6,10 +6,10 @@ const ChatPage = () => {
   const { jobId } = useParams();
 
   return (
-    <div className="flex">
+    <div className="md:flex">
       <Sidebar />
 
-      <div className="flex-1 min-h-screen bg-gray-50 p-6 md:p-10">
+      <div className="flex-1 min-h-screen bg-gray-50 p-4 md:p-10 pt-20 md:pt-10">
         <div className="mb-6">
           <Link
             to={-1}

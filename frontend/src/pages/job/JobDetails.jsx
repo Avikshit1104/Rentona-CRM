@@ -62,7 +62,7 @@ const JobDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex">
+      <div className="md:flex">
         <Sidebar />
         <div className="flex-1 min-h-screen bg-gray-50 p-10">
           Loading job details...
@@ -73,7 +73,7 @@ const JobDetails = () => {
 
   if (!job) {
     return (
-      <div className="flex">
+      <div className="md:flex">
         <Sidebar />
         <div className="flex-1 min-h-screen bg-gray-50 p-10">
           Job not found.

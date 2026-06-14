@@ -157,7 +157,7 @@ const OwnerDashboard = () => {
     <div className="flex bg-gray-50">
       <Sidebar />
 
-      <div className="flex-1 min-h-screen bg-gray-50 p-6 md:p-10">
+      <div className="flex-1 min-h-screen bg-gray-50 p-4 md:p-10 pt-20 md:pt-10">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
             <h1 className="text-4xl font-bold tracking-tight">
