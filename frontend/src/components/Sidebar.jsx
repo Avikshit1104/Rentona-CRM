@@ -80,6 +80,13 @@ const Sidebar = () => {
             />
 
             <NavItem
+              to="/tenant/my-properties"
+              label="My Properties"
+              currentPath={location.pathname}
+              onClick={closeMenu}
+            />
+
+            <NavItem
               to="/tenant/payments"
               label="Payments"
               currentPath={location.pathname}

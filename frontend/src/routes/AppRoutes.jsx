@@ -11,31 +11,28 @@ import Signup from "../pages/auth/signup";
 import OwnerDashboard from "../pages/owner/OwnerDashboard";
 import OwnerAnalytics from "../pages/owner/OwnerAnalytics";
 import OwnerPayments from "../pages/owner/OwnerPayments";
-import Notifications from "../pages/Notifications";
-
 
 import TenantDashboard from "../pages/tenant/TenantDashboard";
 import TenantPayments from "../pages/tenant/TenantPayments";
+import MyProperties from "../pages/tenant/MyProperties";
 
 import WorkerDashboard from "../pages/worker/WorkerDashboard";
+
+import Notifications from "../pages/Notifications";
 import JobDetails from "../pages/job/JobDetails";
+import ChatPage from "../pages/chat/ChatPage";
 
 import ProtectedRoute from "../components/ProtectedRoute";
-
-import ChatPage from "../pages/chat/ChatPage";
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Default */}
         <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Owner */}
         <Route
           path="/owner"
           element={
@@ -55,15 +52,6 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="/chat/:jobId"
-          element={
-            <ProtectedRoute allowedRoles={["OWNER", "TENANT", "WORKER"]}>
-              <ChatPage />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
           path="/owner/payments"
           element={
             <ProtectedRoute allowedRole="OWNER">
@@ -73,26 +61,19 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="/notifications"
-          element={
-            <ProtectedRoute
-              allowedRoles={[
-                "OWNER",
-                "TENANT",
-                "WORKER",
-              ]}
-            >
-              <Notifications />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Tenant */}
-        <Route
           path="/tenant"
           element={
             <ProtectedRoute allowedRole="TENANT">
               <TenantDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tenant/my-properties"
+          element={
+            <ProtectedRoute allowedRole="TENANT">
+              <MyProperties />
             </ProtectedRoute>
           }
         />
@@ -106,7 +87,6 @@ const AppRoutes = () => {
           }
         />
 
-        {/* Worker */}
         <Route
           path="/worker"
           element={
@@ -117,15 +97,38 @@ const AppRoutes = () => {
         />
 
         <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute
+              allowedRoles={["OWNER", "TENANT", "WORKER"]}
+            >
+              <Notifications />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/chat/:jobId"
+          element={
+            <ProtectedRoute
+              allowedRoles={["OWNER", "TENANT", "WORKER"]}
+            >
+              <ChatPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/job/:jobId"
           element={
-            <ProtectedRoute allowedRoles={["OWNER", "TENANT", "WORKER"]}>
+            <ProtectedRoute
+              allowedRoles={["OWNER", "TENANT", "WORKER"]}
+            >
               <JobDetails />
             </ProtectedRoute>
           }
         />
 
-        {/* Fallback */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
