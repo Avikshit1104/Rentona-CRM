@@ -25,11 +25,11 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
     try {
-      const res = await API.post("/auth/login", formData);
+      setLoading(true);
 
+      const res = await API.post("/auth/login", formData);
       const { token, user } = res.data;
 
       login(token, user);
@@ -38,23 +38,21 @@ const Login = () => {
       navigate(`/${user.role.toLowerCase()}`);
     } catch (error) {
       console.log(error);
-      toast.error(
-        error.response?.data?.message || "Login failed"
-      );
+      toast.error(error.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8">
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 md:p-8">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-slate-900">
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
             Rentora
           </h1>
 
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-500 mt-2 text-sm md:text-base">
             Login to your dashboard
           </p>
         </div>
@@ -66,7 +64,7 @@ const Login = () => {
             placeholder="Email address"
             value={formData.email}
             onChange={handleChange}
-            className="border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm md:text-base"
             required
           />
 
@@ -76,14 +74,14 @@ const Login = () => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm md:text-base"
             required
           />
 
           <button
             type="submit"
             disabled={loading}
-            className={`mt-2 py-3 rounded-xl text-white font-semibold transition ${
+            className={`mt-2 w-full py-3 rounded-xl text-white font-semibold transition ${
               loading
                 ? "bg-gray-500 cursor-not-allowed"
                 : "bg-indigo-600 hover:bg-indigo-700"
@@ -93,7 +91,7 @@ const Login = () => {
           </button>
         </form>
 
-        <p className="text-center text-gray-500 mt-6">
+        <p className="text-center text-gray-500 mt-6 text-sm md:text-base">
           Don't have an account?{" "}
           <Link
             to="/signup"

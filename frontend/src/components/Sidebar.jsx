@@ -16,6 +16,7 @@ const Sidebar = () => {
   const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
+    setOpen(false);
     logout();
     navigate("/login");
   };
@@ -24,14 +25,23 @@ const Sidebar = () => {
 
   const SidebarContent = () => (
     <>
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Rentora
-        </h1>
+      <div className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Rentora
+          </h1>
 
-        <p className="text-slate-400 text-sm mt-1">
-          {user?.role} Panel
-        </p>
+          <p className="text-slate-400 text-sm mt-1">
+            {user?.role} Panel
+          </p>
+        </div>
+
+        <button
+          onClick={closeMenu}
+          className="md:hidden text-slate-300 text-2xl leading-none"
+        >
+          ×
+        </button>
       </div>
 
       <div className="flex flex-col gap-3 flex-1">
@@ -105,8 +115,8 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="border-t border-slate-800 pt-5">
-        <p className="text-sm text-slate-400 mb-3">
+      <div className="border-t border-slate-800 pt-5 mt-6">
+        <p className="text-sm text-slate-400 mb-3 break-words">
           {user?.name}
         </p>
 
@@ -122,7 +132,6 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile Navbar */}
       <div className="md:hidden fixed top-0 left-0 right-0 bg-slate-950 text-white px-4 py-3 flex justify-between items-center z-50">
         <h1 className="text-xl font-bold">
           Rentora
@@ -130,33 +139,28 @@ const Sidebar = () => {
 
         <button
           onClick={() => setOpen(true)}
-          className="text-2xl"
+          className="text-2xl leading-none"
         >
           ☰
         </button>
       </div>
 
-      {/* Mobile Overlay */}
       {open && (
         <div
           className="md:hidden fixed inset-0 bg-black/50 z-40"
-          onClick={() => setOpen(false)}
+          onClick={closeMenu}
         />
       )}
 
-      {/* Mobile Drawer */}
       <div
-        className={`md:hidden fixed top-0 left-0 h-full w-72 bg-slate-950 text-white p-6 flex flex-col z-50 transition-transform duration-300 ${
-          open
-            ? "translate-x-0"
-            : "-translate-x-full"
+        className={`md:hidden fixed top-0 left-0 h-full w-72 max-w-[85vw] bg-slate-950 text-white p-6 flex flex-col z-50 transition-transform duration-300 overflow-y-auto ${
+          open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <SidebarContent />
       </div>
 
-      {/* Desktop Sidebar */}
-      <div className="hidden md:flex w-64 min-h-screen bg-slate-950 text-white p-6 flex-col">
+      <div className="hidden md:flex w-64 min-h-screen bg-slate-950 text-white p-6 flex-col shrink-0">
         <SidebarContent />
       </div>
     </>
@@ -169,7 +173,9 @@ const NavItem = ({
   currentPath,
   onClick,
 }) => {
-  const active = currentPath === to;
+  const active =
+    currentPath === to ||
+    (to !== "/" && currentPath.startsWith(`${to}/`));
 
   return (
     <Link

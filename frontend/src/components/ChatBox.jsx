@@ -78,7 +78,6 @@ const ChatBox = ({ jobId }) => {
 
     try {
       socket?.emit("send-message", messageData);
-
       setText("");
 
       await API.post("/chat", {
@@ -93,26 +92,29 @@ const ChatBox = ({ jobId }) => {
 
   if (!jobId) {
     return (
-      <div className="bg-white border rounded-2xl p-6 text-gray-500">
+      <div className="bg-white border rounded-2xl p-4 md:p-6 text-gray-500">
         Select a job to start chatting.
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm flex flex-col h-[500px]">
-      <div className="p-4 border-b">
-        <h2 className="text-lg font-bold">Job Chat</h2>
-        <p className="text-sm text-gray-500">
+    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm flex flex-col h-[70vh] md:h-[500px] max-h-[650px] overflow-hidden">
+      <div className="p-4 border-b shrink-0">
+        <h2 className="text-base md:text-lg font-bold">
+          Job Chat
+        </h2>
+
+        <p className="text-xs md:text-sm text-gray-500 mt-1">
           Real-time conversation for this worker job.
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
+      <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 bg-gray-50">
         {loading ? (
-          <p className="text-gray-500">Loading messages...</p>
+          <p className="text-gray-500 text-sm">Loading messages...</p>
         ) : messages.length === 0 ? (
-          <p className="text-gray-500 text-center mt-20">
+          <p className="text-gray-500 text-center mt-20 text-sm">
             No messages yet. Start the conversation.
           </p>
         ) : (
@@ -125,19 +127,21 @@ const ChatBox = ({ jobId }) => {
                 className={`flex ${isMe ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[75%] rounded-2xl px-4 py-3 shadow-sm ${
+                  className={`max-w-[85%] md:max-w-[75%] rounded-2xl px-3 md:px-4 py-2 md:py-3 shadow-sm break-words ${
                     isMe
                       ? "bg-indigo-600 text-white rounded-br-sm"
                       : "bg-white text-gray-800 border rounded-bl-sm"
                   }`}
                 >
                   {!isMe && (
-                    <p className="text-xs font-semibold mb-1 text-gray-500">
+                    <p className="text-xs font-semibold mb-1 text-gray-500 break-words">
                       {msg.sender?.name || "User"}
                     </p>
                   )}
 
-                  <p className="text-sm">{msg.message}</p>
+                  <p className="text-sm whitespace-pre-wrap break-words">
+                    {msg.message}
+                  </p>
 
                   <p
                     className={`text-[10px] mt-2 ${
@@ -160,25 +164,27 @@ const ChatBox = ({ jobId }) => {
         <div ref={bottomRef} />
       </div>
 
-      <div className="p-4 border-t flex gap-3">
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              sendMessage();
-            }
-          }}
-          placeholder="Type your message..."
-          className="flex-1 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-200"
-        />
+      <div className="p-3 md:p-4 border-t shrink-0 bg-white">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                sendMessage();
+              }
+            }}
+            placeholder="Type your message..."
+            className="flex-1 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-200 text-sm md:text-base"
+          />
 
-        <button
-          onClick={sendMessage}
-          className="bg-indigo-600 text-white px-5 py-3 rounded-xl hover:bg-indigo-700 transition"
-        >
-          Send
-        </button>
+          <button
+            onClick={sendMessage}
+            className="w-full sm:w-auto bg-indigo-600 text-white px-5 py-3 rounded-xl hover:bg-indigo-700 transition"
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );

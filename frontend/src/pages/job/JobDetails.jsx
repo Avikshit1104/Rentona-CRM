@@ -52,7 +52,10 @@ const JobDetails = () => {
       });
 
       toast.success("Review submitted");
-      setReviewData({ rating: 5, comment: "" });
+      setReviewData({
+        rating: 5,
+        comment: "",
+      });
       fetchJob();
     } catch (error) {
       console.log(error);
@@ -62,10 +65,13 @@ const JobDetails = () => {
 
   if (loading) {
     return (
-      <div className="md:flex">
+      <div className="md:flex bg-gray-50">
         <Sidebar />
-        <div className="flex-1 min-h-screen bg-gray-50 p-10">
-          Loading job details...
+
+        <div className="flex-1 min-h-screen bg-gray-50 p-4 md:p-10 pt-20 md:pt-10">
+          <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+            Loading job details...
+          </div>
         </div>
       </div>
     );
@@ -73,66 +79,86 @@ const JobDetails = () => {
 
   if (!job) {
     return (
-      <div className="md:flex">
+      <div className="md:flex bg-gray-50">
         <Sidebar />
-        <div className="flex-1 min-h-screen bg-gray-50 p-10">
-          Job not found.
+
+        <div className="flex-1 min-h-screen bg-gray-50 p-4 md:p-10 pt-20 md:pt-10">
+          <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+            Job not found.
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex bg-gray-50">
+    <div className="md:flex bg-gray-50">
       <Sidebar />
 
-      <div className="flex-1 min-h-screen p-6 md:p-10">
+      <div className="flex-1 min-h-screen bg-gray-50 p-4 md:p-10 pt-20 md:pt-10 overflow-x-hidden">
         <div className="mb-6">
-          <Link to={-1} className="text-sm text-indigo-600 hover:underline">
+          <Link
+            to={-1}
+            className="inline-block text-sm text-indigo-600 hover:underline mb-4"
+          >
             ← Back
           </Link>
 
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold">Job Details</h1>
-              <p className="text-gray-500 mt-1">
+              <h1 className="text-2xl md:text-3xl font-bold">
+                Job Details
+              </h1>
+
+              <p className="text-gray-500 mt-1 text-sm md:text-base">
                 View complaint, property, worker, chat, and review details.
               </p>
             </div>
 
-            <StatusBadge status={job.status} />
+            <div className="flex">
+              <StatusBadge status={job.status} />
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
-          <div className="xl:col-span-2 bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h2 className="text-xl font-bold mb-4">Complaint</h2>
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+          <div className="xl:col-span-2 bg-white rounded-2xl border border-gray-100 p-4 md:p-6 shadow-sm">
+            <h2 className="text-lg md:text-xl font-bold mb-4">
+              Complaint
+            </h2>
 
-            <h3 className="text-2xl font-semibold">{job.complaint?.title}</h3>
+            <h3 className="text-xl md:text-2xl font-semibold break-words">
+              {job.complaint?.title}
+            </h3>
 
-            <p className="text-gray-600 mt-3">
+            <p className="text-gray-600 mt-3 break-words">
               {job.complaint?.description}
             </p>
 
             {job.complaint?.image && (
-            <img
+              <img
                 src={`${import.meta.env.VITE_API_URL}${job.complaint.image}`}
                 alt={job.complaint?.title}
-                className="w-full h-72 object-cover rounded-xl mt-5"
-            />
+                className="w-full h-52 md:h-72 object-cover rounded-xl mt-5"
+              />
             )}
 
-            <div className="mt-5 flex items-center gap-2">
-              <span className="text-sm text-gray-500">Complaint Status:</span>
+            <div className="mt-5 flex flex-wrap items-center gap-2">
+              <span className="text-sm text-gray-500">
+                Complaint Status:
+              </span>
               <StatusBadge status={job.complaint?.status} />
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h2 className="text-xl font-bold mb-4">Worker</h2>
+          <InfoCard title="Worker">
+            <p className="font-semibold text-lg break-words">
+              {job.worker?.name}
+            </p>
 
-            <p className="font-semibold text-lg">{job.worker?.name}</p>
-            <p className="text-gray-500 mt-1">{job.worker?.email}</p>
+            <p className="text-gray-500 mt-1 break-words">
+              {job.worker?.email}
+            </p>
 
             <p className="text-gray-600 mt-3">
               Skill:{" "}
@@ -148,13 +174,11 @@ const JobDetails = () => {
             <p className="text-gray-600 mt-2">
               Completed Jobs: {job.worker?.completedJobs || 0}
             </p>
-          </div>
+          </InfoCard>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h2 className="text-xl font-bold mb-4">Property</h2>
-
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+          <InfoCard title="Property">
             {job.complaint?.property?.image && (
               <img
                 src={`${import.meta.env.VITE_API_URL}${job.complaint.property.image}`}
@@ -163,57 +187,57 @@ const JobDetails = () => {
               />
             )}
 
-            <p className="font-semibold text-lg">
+            <p className="font-semibold text-lg break-words">
               {job.complaint?.property?.title}
             </p>
 
-            <p className="text-gray-500 mt-2">
+            <p className="text-gray-500 mt-2 break-words">
               {job.complaint?.property?.description}
             </p>
 
-            <p className="text-gray-600 mt-3">
+            <p className="text-gray-600 mt-3 break-words">
               📍 {job.complaint?.property?.location}
             </p>
 
             <p className="text-indigo-600 font-bold mt-2">
               ₹ {job.complaint?.property?.price}
             </p>
-          </div>
+          </InfoCard>
 
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h2 className="text-xl font-bold mb-4">Tenant</h2>
-
-            <p className="font-semibold text-lg">
+          <InfoCard title="Tenant">
+            <p className="font-semibold text-lg break-words">
               {job.complaint?.createdBy?.name}
             </p>
 
-            <p className="text-gray-500 mt-1">
+            <p className="text-gray-500 mt-1 break-words">
               {job.complaint?.createdBy?.email}
             </p>
 
             <p className="text-gray-600 mt-3">
               Role: {job.complaint?.createdBy?.role}
             </p>
-          </div>
+          </InfoCard>
 
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h2 className="text-xl font-bold mb-4">Timeline</h2>
-
-            <p className="text-gray-600">
+          <InfoCard title="Timeline">
+            <p className="text-gray-600 break-words">
               Created: {new Date(job.createdAt).toLocaleString()}
             </p>
 
-            <p className="text-gray-600 mt-3">Current Status:</p>
+            <p className="text-gray-600 mt-3">
+              Current Status:
+            </p>
 
             <div className="mt-2">
               <StatusBadge status={job.status} />
             </div>
-          </div>
+          </InfoCard>
         </div>
 
         {job.status === "DONE" && (
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm mb-8">
-            <h2 className="text-xl font-bold mb-4">Worker Review</h2>
+          <div className="bg-white rounded-2xl border border-gray-100 p-4 md:p-6 shadow-sm mb-6 md:mb-8">
+            <h2 className="text-lg md:text-xl font-bold mb-4">
+              Worker Review
+            </h2>
 
             {job.review ? (
               <div>
@@ -221,7 +245,7 @@ const JobDetails = () => {
                   Rating: ⭐ {job.review.rating}
                 </p>
 
-                <p className="text-gray-600 mt-2">
+                <p className="text-gray-600 mt-2 break-words">
                   {job.review.comment || "No comment added."}
                 </p>
               </div>
@@ -235,7 +259,7 @@ const JobDetails = () => {
                       rating: e.target.value,
                     })
                   }
-                  className="border p-3 rounded-lg"
+                  className="border p-3 rounded-lg w-full"
                 >
                   <option value={5}>5 - Excellent</option>
                   <option value={4}>4 - Good</option>
@@ -253,10 +277,10 @@ const JobDetails = () => {
                     })
                   }
                   placeholder="Write your review..."
-                  className="border p-3 rounded-lg min-h-28"
+                  className="border p-3 rounded-lg min-h-28 w-full"
                 />
 
-                <button className="bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700">
+                <button className="w-full sm:w-auto bg-indigo-600 text-white px-5 py-3 rounded-lg hover:bg-indigo-700">
                   Submit Review
                 </button>
               </form>
@@ -264,10 +288,21 @@ const JobDetails = () => {
           </div>
         )}
 
-        <ChatBox jobId={job.id} />
+        <div className="mb-8">
+          <ChatBox jobId={job.id} />
+        </div>
       </div>
     </div>
   );
 };
+
+const InfoCard = ({ title, children }) => (
+  <div className="bg-white rounded-2xl border border-gray-100 p-4 md:p-6 shadow-sm">
+    <h2 className="text-lg md:text-xl font-bold mb-4">
+      {title}
+    </h2>
+    {children}
+  </div>
+);
 
 export default JobDetails;

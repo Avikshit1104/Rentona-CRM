@@ -110,7 +110,9 @@ const TenantDashboard = () => {
       <div className="flex-1 min-h-screen bg-gray-50 p-4 md:p-10 pt-20 md:pt-10">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold">Tenant Dashboard</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">
+              Tenant Dashboard
+            </h1>
             <p className="text-gray-500 mt-1">
               Browse properties, apply, pay rent, raise complaints, and chat
               with assigned workers.
@@ -125,7 +127,7 @@ const TenantDashboard = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 mb-10">
           <StatCard title="Available Properties" value={properties.length} />
           <StatCard title="My Complaints" value={complaints.length} />
           <StatCard title="Saved Budget" value="₹20K" />
@@ -147,19 +149,31 @@ const TenantDashboard = () => {
                 key={property.id}
                 className="bg-white p-5 rounded-2xl shadow-sm hover:shadow-lg transition duration-300 border border-gray-100"
               >
-                <h2 className="text-2xl font-bold mb-2">{property.title}</h2>
+                {property.image && (
+                  <img
+                    src={`${import.meta.env.VITE_API_URL}${property.image}`}
+                    alt={property.title}
+                    className="w-full h-44 object-cover rounded-xl mb-4"
+                  />
+                )}
 
-                <p className="text-gray-600 mb-3">{property.description}</p>
+                <h2 className="text-lg md:text-2xl font-bold mb-2 break-words">
+                  {property.title}
+                </h2>
 
-                <p className="mb-2">📍 {property.location}</p>
+                <p className="text-gray-600 mb-3 break-words">
+                  {property.description}
+                </p>
+
+                <p className="mb-2 break-words">📍 {property.location}</p>
 
                 <p className="text-lg font-semibold text-indigo-600 mb-4">
                   ₹ {property.price}
                 </p>
 
                 <button
+                  className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition"
                   onClick={() => applyProperty(property.id)}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition"
                 >
                   Apply
                 </button>
@@ -230,15 +244,15 @@ const TenantDashboard = () => {
             subtitle="Your submitted complaints will appear here."
           />
         ) : (
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
             {complaints.map((complaint) => (
               <div
                 key={complaint.id}
                 className="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-lg transition duration-300"
               >
-                <h2 className="text-xl font-semibold">{complaint.title}</h2>
+                <h2 className="text-lg md:text-xl font-semibold break-words">{complaint.title}</h2>
 
-                <p className="text-gray-500 mt-2">{complaint.description}</p>
+                <p className="text-gray-500 mt-2 break-words">{complaint.description}</p>
 
                 {complaint.image && (
                   <img
@@ -248,7 +262,7 @@ const TenantDashboard = () => {
                   />
                 )}
 
-                <p className="mt-3 flex items-center gap-2">
+                <p className="mt-3 flex flex-wrap items-center gap-2">
                   Status: <StatusBadge status={complaint.status} />
                 </p>
 
@@ -261,7 +275,7 @@ const TenantDashboard = () => {
                 {complaint.jobs?.length > 0 ? (
                   <Link
                     to={`/job/${complaint.jobs[0].id}`}
-                    className="inline-block mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+                    className="block text-center mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
                   >
                     Chat With Worker
                   </Link>

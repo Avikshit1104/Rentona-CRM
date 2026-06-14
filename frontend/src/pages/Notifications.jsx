@@ -55,33 +55,42 @@ const Notifications = () => {
 
   if (loading) {
     return (
-      <div className="md:flex">
+      <div className="md:flex bg-gray-50">
         <Sidebar />
-        <div className="flex-1 min-h-screen bg-gray-50 p-10">
-          Loading notifications...
+
+        <div className="flex-1 min-h-screen bg-gray-50 p-4 md:p-10 pt-20 md:pt-10">
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            Loading notifications...
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="md:flex">
+    <div className="md:flex bg-gray-50">
       <Sidebar />
 
-      <div className="flex-1 min-h-screen bg-gray-50 p-4 md:p-10 pt-20 md:pt-10">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div className="flex-1 min-h-screen bg-gray-50 p-4 md:p-10 pt-20 md:pt-10 overflow-x-hidden">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold">Notifications</h1>
-            <p className="text-gray-500 mt-1">
-              You have {unreadCount} unread notification
-              {unreadCount !== 1 ? "s" : ""}.
+            <h1 className="text-2xl md:text-3xl font-bold">
+              Notifications
+            </h1>
+
+            <p className="text-gray-500 mt-1 text-sm md:text-base">
+              You have {unreadCount}{" "}
+              {unreadCount === 1
+                ? "unread notification"
+                : "unread notifications"}
+              .
             </p>
           </div>
 
           {unreadCount > 0 && (
             <button
               onClick={markAllAsRead}
-              className="bg-black text-white px-5 py-3 rounded-xl hover:bg-gray-800 transition"
+              className="w-full sm:w-auto bg-black text-white px-5 py-3 rounded-xl hover:bg-gray-800 transition"
             >
               Mark All as Read
             </button>
@@ -98,20 +107,20 @@ const Notifications = () => {
             {notifications.map((notification) => (
               <div
                 key={notification.id}
-                className={`bg-white border rounded-2xl p-5 shadow-sm transition ${
+                className={`bg-white border rounded-2xl p-4 md:p-5 shadow-sm transition ${
                   notification.isRead
                     ? "border-gray-100"
                     : "border-indigo-300 ring-2 ring-indigo-100"
                 }`}
               >
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-3 mb-2">
                       {!notification.isRead && (
-                        <span className="h-3 w-3 rounded-full bg-indigo-600" />
+                        <span className="h-3 w-3 rounded-full bg-indigo-600 shrink-0" />
                       )}
 
-                      <h2 className="text-lg font-semibold">
+                      <h2 className="text-base md:text-lg font-semibold break-words">
                         {notification.title}
                       </h2>
 
@@ -122,7 +131,7 @@ const Notifications = () => {
                       )}
                     </div>
 
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 text-sm md:text-base break-words">
                       {notification.message}
                     </p>
 
@@ -134,7 +143,7 @@ const Notifications = () => {
                   {!notification.isRead && (
                     <button
                       onClick={() => markAsRead(notification.id)}
-                      className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+                      className="w-full sm:w-auto bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
                     >
                       Mark as Read
                     </button>

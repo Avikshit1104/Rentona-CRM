@@ -116,47 +116,59 @@ const WorkerDashboard = () => {
   );
 
   return (
-    <div className="flex bg-gray-50">
+    <div className="md:flex bg-gray-50">
       <Sidebar />
 
-      <div className="flex-1 min-h-screen bg-gray-50 p-4 md:p-10 pt-20 md:pt-10">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold tracking-tight">
+      <div className="flex-1 min-h-screen bg-gray-50 p-4 md:p-10 pt-20 md:pt-10 overflow-x-hidden">
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tight">
             Worker Dashboard
           </h1>
-          <p className="text-gray-500 mt-2">
+
+          <p className="text-gray-500 mt-2 text-sm md:text-base">
             Manage assigned jobs in real-time
           </p>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition duration-300 border border-gray-100 mb-10">
-          <h2 className="text-lg font-semibold mb-4">Job Overview</h2>
+        <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm hover:shadow-lg transition duration-300 border border-gray-100 mb-8 md:mb-10">
+          <h2 className="text-lg font-semibold mb-4">
+            Job Overview
+          </h2>
 
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie data={chartData} dataKey="value" outerRadius={80} label>
-                {chartData.map((_, index) => (
-                  <Cell key={index} fill={COLORS[index]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+          <div className="h-[240px] md:h-[250px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  dataKey="value"
+                  outerRadius={75}
+                  label
+                >
+                  {chartData.map((_, index) => (
+                    <Cell key={index} fill={COLORS[index]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-10">
           <StatCard title="Total Jobs" value={jobs.length} />
           <StatCard title="Active Jobs" value={accepted} />
           <StatCard title="Completed" value={done} />
         </div>
 
-        <div className="flex gap-3 mb-6">
+        <div className="flex flex-wrap gap-3 mb-6">
           {["ALL", "PENDING", "ACCEPTED", "DONE"].map((type) => (
             <button
               key={type}
               onClick={() => setFilter(type)}
-              className={`px-4 py-2 rounded-lg border transition ${
-                filter === type ? "bg-black text-white" : "bg-white"
+              className={`px-4 py-2 rounded-lg border transition text-sm md:text-base ${
+                filter === type
+                  ? "bg-black text-white"
+                  : "bg-white hover:bg-gray-100"
               }`}
             >
               {type}
@@ -170,17 +182,17 @@ const WorkerDashboard = () => {
             subtitle="Assigned jobs will appear here."
           />
         ) : (
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
             {filteredJobs.map((job) => (
               <div
                 key={job.id}
-                className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg transition duration-300"
+                className="bg-white border border-gray-100 rounded-2xl p-4 md:p-6 hover:shadow-lg transition duration-300"
               >
-                <h2 className="text-xl font-semibold">
+                <h2 className="text-lg md:text-xl font-semibold break-words">
                   {job.complaint?.title}
                 </h2>
 
-                <p className="text-gray-500 mt-2">
+                <p className="text-gray-500 mt-2 break-words">
                   {job.complaint?.description}
                 </p>
 
@@ -188,28 +200,31 @@ const WorkerDashboard = () => {
                   <img
                     src={`${import.meta.env.VITE_API_URL}${job.complaint.image}`}
                     alt={job.complaint?.title}
-                    className="w-full h-48 object-cover rounded-xl mt-4"
+                    className="w-full h-44 md:h-48 object-cover rounded-xl mt-4"
                   />
                 )}
 
-                <div className="mt-4 flex items-center gap-2">
-                  <span className="text-sm text-gray-500">Status:</span>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  <span className="text-sm text-gray-500">
+                    Status:
+                  </span>
+
                   <StatusBadge status={job.status} />
                 </div>
 
-                <div className="flex flex-wrap gap-3 mt-5">
+                <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-3 mt-5">
                   {job.status === "PENDING" && (
                     <>
                       <button
                         onClick={() => updateDecision(job.id, "ACCEPTED")}
-                        className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
+                        className="w-full sm:w-auto px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
                       >
                         Accept
                       </button>
 
                       <button
                         onClick={() => updateDecision(job.id, "REJECTED")}
-                        className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+                        className="w-full sm:w-auto px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
                       >
                         Reject
                       </button>
@@ -220,14 +235,14 @@ const WorkerDashboard = () => {
                     <>
                       <button
                         onClick={() => markDone(job.id)}
-                        className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+                        className="w-full sm:w-auto px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
                       >
                         Mark Done
                       </button>
 
                       <Link
                         to={`/job/${job.id}`}
-                        className="px-4 py-2 rounded-lg bg-black text-white hover:bg-gray-800"
+                        className="w-full sm:w-auto text-center px-4 py-2 rounded-lg bg-black text-white hover:bg-gray-800"
                       >
                         Open Chat
                       </Link>
@@ -237,7 +252,7 @@ const WorkerDashboard = () => {
                   {job.status === "DONE" && (
                     <Link
                       to={`/job/${job.id}`}
-                      className="px-4 py-2 rounded-lg bg-black text-white hover:bg-gray-800"
+                      className="w-full sm:w-auto text-center px-4 py-2 rounded-lg bg-black text-white hover:bg-gray-800"
                     >
                       View Chat
                     </Link>

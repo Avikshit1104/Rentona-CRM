@@ -49,28 +49,35 @@ const Signup = () => {
       navigate("/login");
     } catch (error) {
       console.log(error);
-      toast.error(error.response?.data?.message || "Signup failed");
+      toast.error(
+        error.response?.data?.message || "Signup failed"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8">
-        <h1 className="text-3xl font-bold text-center mb-2">Create Account</h1>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 md:p-8">
+        <h1 className="text-2xl md:text-3xl font-bold text-center mb-2">
+          Create Account
+        </h1>
 
-        <p className="text-gray-500 text-center mb-8">
+        <p className="text-gray-500 text-center mb-8 text-sm md:text-base">
           Join Rentora as an owner, tenant, or worker.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
           <input
             name="name"
             value={formData.name}
             onChange={handleChange}
             placeholder="Full Name"
-            className="w-full border p-3 rounded-xl"
+            className="w-full border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm md:text-base"
             required
           />
 
@@ -80,7 +87,7 @@ const Signup = () => {
             onChange={handleChange}
             placeholder="Email"
             type="email"
-            className="w-full border p-3 rounded-xl"
+            className="w-full border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm md:text-base"
             required
           />
 
@@ -90,7 +97,7 @@ const Signup = () => {
             onChange={handleChange}
             placeholder="Password"
             type="password"
-            className="w-full border p-3 rounded-xl"
+            className="w-full border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm md:text-base"
             required
           />
 
@@ -99,14 +106,14 @@ const Signup = () => {
             value={formData.phone}
             onChange={handleChange}
             placeholder="Phone Number"
-            className="w-full border p-3 rounded-xl"
+            className="w-full border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm md:text-base"
           />
 
           <select
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className="w-full border p-3 rounded-xl"
+            className="w-full border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm md:text-base"
           >
             <option value="TENANT">Tenant</option>
             <option value="OWNER">Owner</option>
@@ -118,7 +125,7 @@ const Signup = () => {
               name="skill"
               value={formData.skill}
               onChange={handleChange}
-              className="w-full border p-3 rounded-xl"
+              className="w-full border border-gray-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm md:text-base"
               required
             >
               <option value="">Select Skill</option>
@@ -132,18 +139,30 @@ const Signup = () => {
           )}
 
           <button
+            type="submit"
             disabled={loading}
-            className="w-full bg-black text-white p-3 rounded-xl hover:bg-gray-800 disabled:opacity-60"
+            className={`w-full py-3 rounded-xl text-white font-semibold transition ${
+              loading
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-black hover:bg-gray-800"
+            }`}
           >
             {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
 
-        <p className="text-center text-gray-500 mt-6">
+        <p className="text-center text-gray-500 mt-6 text-sm md:text-base">
           Already have an account?{" "}
-          <Link to="/login" className="text-indigo-600 font-semibold">
+          <Link
+            to="/login"
+            className="text-indigo-600 font-semibold hover:underline"
+          >
             Login
           </Link>
+        </p>
+
+        <p className="text-center text-sm text-gray-500 mt-3">
+          Owner • Tenant • Worker
         </p>
       </div>
     </div>
