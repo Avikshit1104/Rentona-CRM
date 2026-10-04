@@ -12,7 +12,8 @@ cors: {
         "https://rentona-crm-gules.vercel.app",
         "https://rentona-crm-git-main-avikshit-s-projects.vercel.app",
         "http://localhost:5173",
-        "http://localhost:5174"
+        "http://localhost:5174",
+        "http://192.168.29.27:5173"
       ].filter(Boolean),
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     },
