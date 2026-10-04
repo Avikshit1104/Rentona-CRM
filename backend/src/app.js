@@ -17,8 +17,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: [
+origin: [
   process.env.CLIENT_URL,
+  "https://rentona-crm-gules.vercel.app",
+  "https://rentona-crm-git-main-avikshit-s-projects.vercel.app",
   "http://localhost:5173",
   "http://localhost:5174"
 ].filter(Boolean),

@@ -6,12 +6,14 @@ const onlineUsers = new Map();
 
 const initSocket = (server) => {
   io = new Server(server, {
-    cors: {
+cors: {
       origin: [
-  process.env.CLIENT_URL,
-  "http://localhost:5173",
-  "http://localhost:5174"
-].filter(Boolean),
+        process.env.CLIENT_URL,
+        "https://rentona-crm-gules.vercel.app",
+        "https://rentona-crm-git-main-avikshit-s-projects.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:5174"
+      ].filter(Boolean),
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     },
   });
